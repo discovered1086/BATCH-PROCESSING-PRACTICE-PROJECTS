@@ -14,14 +14,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="EMPLOYEE_BATCH")
-public class Employee implements Serializable{
+@Table(name = "EMPLOYEE_BATCH")
+public class Employee implements Serializable {
 
 	private static final long serialVersionUID = -1497555110482987046L;
 
@@ -38,9 +37,14 @@ public class Employee implements Serializable{
 
 	@Column(name = "EML_ADDRSS")
 	private String email;
-	
+
 	@Column(name = "PHN_NMBR")
 	private String phoneNumber;
-	
+
+	@Column(name = "DOB")
+	private String dob;
+
+	@Column(name = "AGE")
+	private String age;
 
 }
