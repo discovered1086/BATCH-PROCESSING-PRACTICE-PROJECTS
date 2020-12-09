@@ -52,7 +52,7 @@ public class OracleDatabaseConfig extends DatabaseConfig {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = createEntityManagerFactoryBean();
 
 		entityManagerFactoryBean.setJpaProperties(decorateOracleSpecificProperties());
-
+		entityManagerFactoryBean.setPersistenceUnitName("ORACLE_PERS_UNIT");
 		return entityManagerFactoryBean;
 	}
 

@@ -12,14 +12,14 @@ public class EmployeeProcessorService {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public void processEmployeeData(){
+    public void processEmployeeData() {
         for (int i = 0; i < 100; i++) {
             EmployeeRecordFetchedEvent recordFetchedEvent =
                     new EmployeeRecordFetchedEvent(EmployeeEntity.builder()
-                    .emailAddress("sly.mania" + i + "@gmail.com")
-                    .firstName("Kingshuk" + i)
-                    .lastName("Mukherjee" + i)
-                    .build());
+                            .emailAddress("sly.mania" + i + "@gmail.com")
+                            .firstName("Kingshuk" + i)
+                            .lastName("Mukherjee" + i)
+                            .build());
 
             eventPublisher.publishEvent(recordFetchedEvent);
         }

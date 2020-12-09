@@ -57,7 +57,7 @@ public class H2DatabaseConfig extends DatabaseConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = createEntityManagerFactoryBean();
 
         entityManagerFactoryBean.setJpaProperties(decorateH2SpecificDatabaseProperties());
-
+        entityManagerFactoryBean.setPersistenceUnitName("H2_PERS_UNIT");
         return entityManagerFactoryBean;
     }
 
