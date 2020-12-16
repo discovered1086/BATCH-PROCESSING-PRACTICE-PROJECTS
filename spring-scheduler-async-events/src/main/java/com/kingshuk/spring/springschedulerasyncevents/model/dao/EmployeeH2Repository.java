@@ -9,18 +9,19 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
 @Repository
-public class EmployeeH2Repository {
+public class EmployeeH2Repository extends AbstractDAORepository{
 
     @Autowired
     @PersistenceContext(type = PersistenceContextType.TRANSACTION, unitName = "H2_PERS_UNIT")
     private EntityManager entityManager;
 
-    //@Transactional(transactionManager = "h2TransactionManager")
+    //@Transactional(transactionManager = "oracleTransactionManager")
     public void save(EmployeeEntity employeeEntity){
-        entityManager.persist(EmployeeEntity.builder()
-                                .emailAddress(employeeEntity.getEmailAddress())
-                                .firstName(employeeEntity.getFirstName())
-                                .lastName(employeeEntity.getLastName()).build());
+        updateData(employeeEntity);
+    }
 
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }

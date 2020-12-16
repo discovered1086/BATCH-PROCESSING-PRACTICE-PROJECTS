@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
 @Repository
-public class EmployeeOracleRepository  {
+public class EmployeeOracleRepository extends AbstractDAORepository{
 
     @Autowired
     @PersistenceContext(type = PersistenceContextType.TRANSACTION, unitName = "ORACLE_PERS_UNIT")
@@ -17,9 +17,11 @@ public class EmployeeOracleRepository  {
 
     //@Transactional(transactionManager = "oracleTransactionManager")
     public void save(EmployeeEntity employeeEntity){
-        entityManager.persist(EmployeeEntity.builder()
-                .emailAddress(employeeEntity.getEmailAddress())
-                .firstName(employeeEntity.getFirstName())
-                .lastName(employeeEntity.getLastName()).build());
+        updateData(employeeEntity);
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }
