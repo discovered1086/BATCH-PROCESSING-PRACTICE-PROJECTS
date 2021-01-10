@@ -15,6 +15,10 @@ public class SchedulerTest {
                 .usingJobData("Kingshuk says", "Hello World")
                 .build();
 
+        JobDetail jobDetail2 = JobBuilder.newJob(TheActualCronJob.class)
+                .withIdentity("myJob2", "King's Jobs")
+                .build();
+
 
         Trigger myTrigger = TriggerBuilder.newTrigger()
                 .withIdentity("myTrigger", "myTriggerGroup")
@@ -26,9 +30,16 @@ public class SchedulerTest {
                 //.forJob(jobDetail)
                 .build();
 
+        Trigger myTrigger2 = TriggerBuilder.newTrigger()
+                .withIdentity("myTrigger2", "myTriggerGroup")
+                .startNow()
+                .withSchedule(CronScheduleBuilder.atHourAndMinuteOnGivenDaysOfWeek(21, 30, DateBuilder.SATURDAY))
+                .build();
+
         scheduler.start();
 
         scheduler.scheduleJob(jobDetail, myTrigger);
+        scheduler.scheduleJob(jobDetail2, myTrigger2);
 
     }
 }
