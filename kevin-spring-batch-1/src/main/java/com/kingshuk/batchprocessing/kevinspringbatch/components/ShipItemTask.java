@@ -12,9 +12,9 @@ public class ShipItemTask implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-        boolean shipmentLost = false;
         final String item = chunkContext.getStepContext().getJobParameters().get("item").toString();
         final String date = chunkContext.getStepContext().getJobParameters().get("run.date").toString();
+        final boolean shipmentLost = Boolean.parseBoolean(chunkContext.getStepContext().getJobParameters().get("shipmentLost").toString());
 
         if(shipmentLost){
             throw new RuntimeException(String.format("The shipment got lost on %s", date));

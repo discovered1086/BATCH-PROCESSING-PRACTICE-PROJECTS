@@ -1,8 +1,6 @@
 package com.kingshuk.batchprocessing.kevinspringbatch.config;
 
-import com.kingshuk.batchprocessing.kevinspringbatch.components.DeliverItemTask;
-import com.kingshuk.batchprocessing.kevinspringbatch.components.PackageItemTask;
-import com.kingshuk.batchprocessing.kevinspringbatch.components.ShipItemTask;
+import com.kingshuk.batchprocessing.kevinspringbatch.components.*;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -37,13 +35,42 @@ public class BatchConfig {
                 .tasklet(new DeliverItemTask()).build();
     }
 
+    @Bean
+    public Step refundCustomerStep() {
+        return stepBuilderFactory.get("refundCustomerStep")
+                .tasklet(new RefundCustomerTask()).build();
+    }
+
+    @Bean
+    public Step closeOrderStep() {
+        return stepBuilderFactory.get("closeOrderStep")
+                .tasklet(new CloseOrderTask()).build();
+    }
+
+//    //Here we define the actual object representation of our batch Job
+//    @Bean
+//    public Job myPackageDelivery() {
+//        return jobBuilderFactory.get("myPackageDelivery")
+//                .start(packageItemStep())
+//                .next(shipItemStep())
+//                .next(deliverItemStep()).build();
+//    }
+
     //Here we define the actual object representation of our batch Job
+    //Conditional job flow
     @Bean
     public Job myPackageDelivery() {
         return jobBuilderFactory.get("myPackageDelivery")
                 .start(packageItemStep())
                 .next(shipItemStep())
-                .next(deliverItemStep()).build();
+                    .on("FAILED").to(refundCustomerStep())
+                .from(shipItemStep())
+                    .on("*").to(deliverItemStep())
+                .from(deliverItemStep())
+                    .on("FAILED").to(refundCustomerStep())
+                .from(deliverItemStep())
+                    .on("*").to(closeOrderStep())
+                .end().build();
     }
 
 }
