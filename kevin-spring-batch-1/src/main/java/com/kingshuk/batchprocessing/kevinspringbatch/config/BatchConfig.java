@@ -6,6 +6,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -47,6 +48,17 @@ public class BatchConfig {
                 .tasklet(new CloseOrderTask()).build();
     }
 
+    @Bean
+    public Step returnItemStep() {
+        return stepBuilderFactory.get("returnItemStep")
+                .tasklet(new ProcessReturnTask()).build();
+    }
+
+    @Bean
+    public JobExecutionDecider decider() {
+        return new OrderCloseExecutionDecider();
+    }
+
 //    //Here we define the actual object representation of our batch Job
 //    @Bean
 //    public Job myPackageDelivery() {
@@ -69,7 +81,12 @@ public class BatchConfig {
                 .from(deliverItemStep())
                     .on("FAILED").to(refundCustomerStep())
                 .from(deliverItemStep())
-                    .on("*").to(closeOrderStep())
+                    .on("*").to(decider())
+                        .on("RETURN_INITIATED").to(returnItemStep())
+                                    .next(refundCustomerStep())
+                                    .next(closeOrderStep())
+                    .from(decider())
+                        .on("RETURN_NOT_INITIATED").to(closeOrderStep())
                 .end().build();
     }
 
