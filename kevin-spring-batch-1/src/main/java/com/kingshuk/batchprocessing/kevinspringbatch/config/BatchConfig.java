@@ -79,7 +79,7 @@ public class BatchConfig {
                 .from(shipItemStep())
                     .on("*").to(deliverItemStep())
                 .from(deliverItemStep())
-                    .on("FAILED").to(refundCustomerStep())
+                    .on("FAILED").fail()
                 .from(deliverItemStep())
                     .on("*").to(decider())
                         .on("RETURN_INITIATED").to(returnItemStep())

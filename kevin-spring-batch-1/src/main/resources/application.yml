@@ -1,8 +1,8 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/spring_batch_kevin
-    username: discovered1086
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@kingsdatabase.csum1qcusypo.us-east-2.rds.amazonaws.com:1521:kingsdb
+    username: kevin_spring_batch
     password: Iofdtiger#16
 
   batch:
