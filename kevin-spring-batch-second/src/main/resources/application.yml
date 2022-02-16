@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@kingsdatabase.csum1qcusypo.us-east-2.rds.amazonaws.com:1521:kingsdb
+    username: kevin_spring_batch
+    password: Iofdtiger#16
+
+  batch:
+    jdbc:
+      initialize-schema: always
