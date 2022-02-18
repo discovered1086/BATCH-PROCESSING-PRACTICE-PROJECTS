@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @ToString(exclude = "financialAccount")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class DebtPaymentDTO implements Serializable {
 
     private DebtType debtType;
