@@ -14,8 +14,6 @@ public class DebtPaymentDTO implements Serializable {
 
     private DebtType debtType;
 
-    private String debtAccount;
-
     private BigDecimal creditLimit;
 
     private BigDecimal availableCredit;
