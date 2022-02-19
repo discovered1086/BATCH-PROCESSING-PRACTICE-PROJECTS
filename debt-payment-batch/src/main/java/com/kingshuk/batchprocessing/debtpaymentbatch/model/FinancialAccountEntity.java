@@ -24,10 +24,10 @@ public class FinancialAccountEntity {
     @Column(name = "account_name", nullable = false)
     private String accountName;
 
-    @Column(name = "external_account_id", nullable = false)
+    @Column(name = "external_account_id", nullable = false, unique = true)
     private String externalAccountId;
 
-    @Column(name = "account_access_token", nullable = false)
+    @Column(name = "account_access_token", nullable = false, unique = true)
     private String accessToken;
 
     @Override

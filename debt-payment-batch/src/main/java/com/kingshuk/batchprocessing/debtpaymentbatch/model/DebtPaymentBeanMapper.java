@@ -1,12 +1,15 @@
 package com.kingshuk.batchprocessing.debtpaymentbatch.model;
 
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = FinancialAccountMapper.class)
+@Mapper(componentModel = "spring",
+        uses = FinancialAccountMapper.class)
+@DecoratedWith(DebtPaymentBeanDecorator.class)
 public interface DebtPaymentBeanMapper {
 
-    @Mapping(source = "financialAccount", target = "debtAccount")
+    @Mapping(target = "debtAccount", ignore = true)
     @Mapping(target = "debtId", ignore = true)
     @Mapping(target = "aprDetails", ignore = true)
     @Mapping(target = "statementDay", ignore = true)

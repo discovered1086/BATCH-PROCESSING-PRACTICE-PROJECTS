@@ -4,4 +4,6 @@ import com.kingshuk.batchprocessing.debtpaymentbatch.model.FinancialAccountEntit
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FinancialAccountRepository extends JpaRepository<FinancialAccountEntity, Long> {
+
+    FinancialAccountEntity findFinancialAccountEntityByExternalAccountId(String externalAccountId);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class DebtPaymentItemReader implements ItemReader<List<DebtPaymentDTO>> {
+public class DebtPaymentItemReader implements ItemReader<DebtPaymentDTO> {
 
     @Autowired
     private FinancialAccountRepository financialAccountRepository;
@@ -27,11 +27,11 @@ public class DebtPaymentItemReader implements ItemReader<List<DebtPaymentDTO>> {
     private PlaidRestService plaidRestService;
 
     @Override
-    public List<DebtPaymentDTO> read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+    public DebtPaymentDTO read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         List<FinancialAccountEntity> accountEntities = financialAccountRepository.findAll();
         List<FinancialAccountDTO> accountDTOS = accountEntities.stream()
                 .map(accountMapper::convertEntityToDto)
                 .collect(Collectors.toList());
-        return plaidRestService.getDebtPaymentDetails(accountDTOS);
+        return plaidRestService.getDebtPaymentDetails(accountDTOS).get(0);
     }
 }

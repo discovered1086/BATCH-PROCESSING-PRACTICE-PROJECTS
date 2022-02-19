@@ -30,7 +30,7 @@ public class BatchConfig {
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public ItemReader<List<DebtPaymentDTO>> itemReader(){
+    public ItemReader<DebtPaymentDTO> itemReader(){
         return new DebtPaymentItemReader();
     }
 
@@ -56,7 +56,7 @@ public class BatchConfig {
     @Bean
     public Step dataUploadStep() {
         return stepBuilderFactory.get("dataUploadStep")
-                .<List<DebtPaymentDTO>, DebtPaymentDTO>chunk(2)
+                .<DebtPaymentDTO, DebtPaymentDTO>chunk(1)
                 .reader(itemReader())
                 .writer(itemWriter())
                 .build();

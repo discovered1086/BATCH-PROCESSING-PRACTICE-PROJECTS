@@ -27,7 +27,7 @@ public class DebtPaymentEntity {
     private DebtType debtType;
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = FinancialAccountEntity.class)
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id", unique = true)
     private FinancialAccountEntity debtAccount;
 
     @Column(name = "credit_limit", columnDefinition = "NUMBER(10,2)")
