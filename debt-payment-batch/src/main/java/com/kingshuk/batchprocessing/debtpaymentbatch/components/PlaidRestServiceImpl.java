@@ -3,18 +3,11 @@ package com.kingshuk.batchprocessing.debtpaymentbatch.components;
 import com.kingshuk.batchprocessing.debtpaymentbatch.model.DebtPaymentDTO;
 import com.kingshuk.batchprocessing.debtpaymentbatch.model.DebtType;
 import com.kingshuk.batchprocessing.debtpaymentbatch.model.FinancialAccountDTO;
-import com.kingshuk.batchprocessing.debtpaymentbatch.repository.FinancialAccountRepository;
-import lombok.AllArgsConstructor;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -23,7 +16,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@AllArgsConstructor
 public class PlaidRestServiceImpl implements PlaidRestService {
 
     @Value("${registration.clientId}")
@@ -32,10 +24,11 @@ public class PlaidRestServiceImpl implements PlaidRestService {
     @Value("${registration.clientSecret}")
     private String clientSecret;
 
-    @Value("${registration.url")
+    @Value("${registration.url}")
     private String url;
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public List<DebtPaymentDTO> getDebtPaymentDetails(List<FinancialAccountDTO> financialAccountDTOS) {
@@ -45,7 +38,11 @@ public class PlaidRestServiceImpl implements PlaidRestService {
             requestBody.put("client_id", clientId);
             requestBody.put("secret", clientSecret);
             requestBody.put("access_token", financialAccountDTO.getAccessToken());
-            HttpEntity<String> request = new HttpEntity<>(requestBody.toString());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
             if (Objects.nonNull(responseEntity.getBody())) {
@@ -57,8 +54,8 @@ public class PlaidRestServiceImpl implements PlaidRestService {
                 DebtPaymentDTO debtPaymentDTO = DebtPaymentDTO.builder()
                         .financialAccount(financialAccountDTO)
                         .debtType(DebtType.getBySubType(subtype))
-                        .availableCredit(new BigDecimal(balances.getString("available")))
-                        .creditLimit(new BigDecimal(balances.getString("limit")))
+                        .availableCredit(BigDecimal.valueOf(balances.getDouble("available")))
+                        .creditLimit(BigDecimal.valueOf(balances.getDouble("limit")))
                         .build();
                 debtPaymentDTOS.add(debtPaymentDTO);
             }
