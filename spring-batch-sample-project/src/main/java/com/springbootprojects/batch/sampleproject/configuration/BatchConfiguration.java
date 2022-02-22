@@ -55,13 +55,9 @@ public class BatchConfiguration {
 		lineTokenizer.setNames("firstName", "lastName", "email", "phoneNumber", "dob");
 
 		BeanWrapperFieldSetMapper<Employee> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
-
 		fieldSetMapper.setTargetType(Employee.class);
-
 		lineMapper.setFieldSetMapper(fieldSetMapper);
-
 		lineMapper.setLineTokenizer(lineTokenizer);
-
 		flatFileItemReader.setLineMapper(lineMapper);
 
 		return flatFileItemReader;
